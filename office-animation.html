@@ -160,6 +160,7 @@
     white-space: nowrap;
     border: 1px solid rgba(255,255,255,0.2);
     font-weight: 600;
+    pointer-events: none;
   }
 
   @keyframes agent-work {
@@ -219,6 +220,31 @@
     50% { transform: scale(1.6); }
   }
 
+  /* Details Panel */
+  .details-panel {
+    position: absolute;
+    top: 50%; right: 2rem;
+    transform: translateY(-50%);
+    width: 320px;
+    background: rgba(11, 12, 18, 0.95);
+    border: 1px solid var(--cyan);
+    border-radius: 12px;
+    padding: 1.5rem;
+    z-index: 100;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 0 30px rgba(34, 211, 238, 0.2);
+    display: none;
+    pointer-events: auto;
+    transition: opacity 0.3s;
+  }
+  .details-panel.visible { display: block; }
+  .details-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; }
+  .details-title { font-size: 1.2rem; font-weight: 700; color: var(--cyan); }
+  .details-status { font-size: 0.75rem; padding: 2px 8px; border-radius: 99px; background: var(--pill-bg); color: var(--pill-ink); font-weight: 600; }
+  .details-desc { font-size: 0.85rem; color: #94a3b8; line-height: 1.5; margin-bottom: 1rem; }
+  .details-metric-row { display: flex; justify-content: space-between; font-size: 0.8rem; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 0.75rem; }
+  .details-metric-val { font-weight: 700; color: #fff; }
+
   /* Status Legend at Bottom */
   .agent-bar {
     position: absolute;
@@ -274,6 +300,24 @@
   <!-- Mini dots injected by JS -->
 </div>
 
+<div class="details-panel" id="details-panel">
+  <div class="details-header">
+    <div>
+      <div class="details-title" id="details-title">—</div>
+      <div class="details-status" id="details-status">Active</div>
+    </div>
+  </div>
+  <div class="details-desc" id="details-desc">—</div>
+  <div class="details-metric-row">
+    <span>Model</span>
+    <span class="details-metric-val" id="details-model">—</span>
+  </div>
+  <div class="details-metric-row">
+    <span>Metric</span>
+    <span class="details-metric-val" id="details-metric">—</span>
+  </div>
+</div>
+
 <script>
   // Positions in isometric coordinates (relative to center 50,50)
   // Distance from center and angle
@@ -296,6 +340,26 @@
   }
 
   let depts = [];
+  function showDetails(d) {
+    const panel = document.getElementById('details-panel');
+    document.getElementById('details-title').textContent = d.name;
+    document.getElementById('details-status').textContent = d.status;
+    document.getElementById('details-desc').textContent = d.desc;
+    document.getElementById('details-model').textContent = d.model;
+    document.getElementById('details-metric').textContent = d.metric;
+
+    const statusEl = document.getElementById('details-status');
+    const color = d.status === 'Active' ? '#22d3ee' : (d.status === 'At Risk' ? '#e5a93b' : '#e5484d');
+    statusEl.style.background = color + '22';
+    statusEl.style.color = color;
+
+    panel.classList.add('visible');
+  }
+
+  function hideDetails() {
+    document.getElementById('details-panel').classList.remove('visible');
+  }
+
   function renderScene(data) {
     depts = data;
     const office = document.getElementById('office');
@@ -326,6 +390,12 @@
         </div>
       `;
       office.appendChild(station);
+
+      // Click to show details
+      station.addEventListener('click', (e) => {
+        e.stopPropagation();
+        showDetails(d);
+      });
 
       // Mini bar
       const mini = document.createElement('div');
@@ -405,6 +475,13 @@
         btn.style.borderColor = 'rgba(255,255,255,0.1)';
         stopFollow();
       }
+    });
+
+    // Click on the scene (outside a station) to close the details panel
+    document.querySelector('.scene-container').addEventListener('click', (e) => {
+      if (e.target.closest('.details-panel')) return;
+      if (e.target.closest('.workstation')) return;
+      hideDetails();
     });
   });
 </script>
