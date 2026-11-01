@@ -1,0 +1,116 @@
+{
+  "lastUpdated": "2026-11-01T15:00:00Z",
+  "systemHealth": "Optimal",
+  "totalDepartments": 12,
+  "activeDepartments": 12,
+  "departments": [
+    {
+      "name": "AI CEO",
+      "nameTH": "ผู้บริหารระดับสูง",
+      "agent": "ai-ceo",
+      "model": "Opus 4.5",
+      "status": "Active",
+      "metric": "ชี้ขาดแล้ว",
+      "desc": "กำหนดทิศทางองค์กร วิสัยทัศน์ และการตัดสินใจชี้ขาดระดับบริหาร"
+    },
+    {
+      "name": "AI Strategy",
+      "nameTH": "แผนกลยุทธ์",
+      "agent": "ai-strategy",
+      "model": "Opus 4.5",
+      "status": "Active",
+      "metric": "ดำเนินอยู่",
+      "desc": "ออกแบบยุทธศาสตร์ระยะยาว แผนการเติบโต และเป้าหมายรายไตรมาส"
+    },
+    {
+      "name": "AI Sales",
+      "nameTH": "ฝ่ายขาย",
+      "agent": "ai-sales",
+      "model": "Sonnet",
+      "status": "Active",
+      "metric": "12 ลีด",
+      "desc": "จัดการ pipeline การขาย การแปลงลีด การติดตามโควตา และพัฒนาธุรกิจ"
+    },
+    {
+      "name": "AI Finance",
+      "nameTH": "ฝ่ายการเงิน",
+      "agent": "ai-finance",
+      "model": "Sonnet",
+      "status": "Active",
+      "metric": "ควบคุมได้",
+      "desc": "สร้างโมเดลทางการเงิน งบประมาณ วิเคราะห์ต้นทุน และรายงานบัญชี"
+    },
+    {
+      "name": "AI HR",
+      "nameTH": "ทรัพยากรบุคคล",
+      "agent": "ai-hr",
+      "model": "Sonnet",
+      "status": "Active",
+      "metric": "12 คน",
+      "desc": "สรรหา ปฐมนิเทศ วัฒนธรรมองค์กร บริหารผลงาน และนโยบาย HR"
+    },
+    {
+      "name": "AI Operations",
+      "nameTH": "ฝ่ายปฏิบัติการ",
+      "agent": "ai-operations",
+      "model": "Sonnet",
+      "status": "Active",
+      "metric": "ปกติ (SLA)",
+      "desc": "จัดการปฏิบัติการประจำวัน ควบคุมคุณภาพ และติดตาม SLA"
+    },
+    {
+      "name": "AI Marketing",
+      "nameTH": "ฝ่ายการตลาด",
+      "agent": "ai-marketing",
+      "model": "Sonnet",
+      "status": "Active",
+      "metric": "ใช้งานอยู่",
+      "desc": "วางตำแหน่งแบรนด์ ดำเนินแคมเปญ สร้างคอนเทนต์ และเข้าถึงตลาด"
+    },
+    {
+      "name": "AI IT & Data",
+      "nameTH": "ไอทีและข้อมูล",
+      "agent": "ai-it-data",
+      "model": "Opus 4.5",
+      "status": "Active",
+      "metric": "ระบบปกติ",
+      "desc": "โครงสร้างพื้นฐานไอที สถาปัตยกรรมซอฟต์แวร์ และท่อส่งข้อมูล"
+    },
+    {
+      "name": "AI Legal",
+      "nameTH": "ฝ่ายกฎหมาย",
+      "agent": "ai-legal",
+      "model": "Sonnet",
+      "status": "Active",
+      "metric": "ทบทวนแล้ว",
+      "desc": "ปฏิบัติตามกฎหมาย ตรวจสอบสัญญา จัดการความเสี่ยง และกฎระเบียบ"
+    },
+    {
+      "name": "AI Research",
+      "nameTH": "ฝ่ายวิจัย",
+      "agent": "ai-research",
+      "model": "Sonnet",
+      "status": "Active",
+      "metric": "อัปเดต",
+      "desc": "วิจัยตลาด วิเคราะห์คู่แข่ง วิเคราะห์ข้อมูล และรายงานข่าวกรอง"
+    },
+    {
+      "name": "AI Support",
+      "nameTH": "ฝ่ายสนับสนุน",
+      "agent": "ai-support",
+      "model": "Sonnet",
+      "status": "Active",
+      "metric": "แก้ไขแล้ว",
+      "desc": "ความสำเร็จของลูกค้า แก้ไขตั๋ว และคัดกรองข้อเสนอแนะ"
+    },
+    {
+      "name": "AI Admin",
+      "nameTH": "ฝ่ายธุรการ",
+      "agent": "ai-admin",
+      "model": "Sonnet",
+      "status": "Active",
+      "metric": "ประสานแล้ว",
+      "desc": "บริหารสำนักงาน กำหนดเวลา ประสานเวิร์กโฟลว์ และจัดการทรัพยากร"
+    }
+  ]
+}

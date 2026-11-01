@@ -49,7 +49,6 @@
     font-variant-numeric: tabular-nums;
   }
 
-  /* No-sidebar shell: 46px top bar on ground over centered column */
   .top-bar {
     height: 48px;
     display: flex;
@@ -89,7 +88,6 @@
     padding: 32px var(--pad) 64px var(--pad);
   }
 
-  /* Title row */
   .title-row {
     display: flex;
     align-items: flex-end;
@@ -129,7 +127,6 @@
     width: 14px; height: 14px; color: var(--faint);
   }
 
-  /* KPI Strip: one container split by hairlines */
   .kpi-strip {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -154,13 +151,18 @@
     font-weight: 600;
     letter-spacing: -0.5px;
   }
+  .kpi-val.loading {
+    width: 60px; height: 24px; background: var(--rule); border-radius: 4px; display: inline-block;
+  }
   .kpi-sub {
     font-size: 11px;
     color: var(--positive);
     margin-top: 2px;
   }
+  .kpi-sub.loading {
+    width: 100px; height: 11px; background: var(--rule); border-radius: 2px; display: block; margin-top: 6px;
+  }
 
-  /* Department grid */
   .grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -176,7 +178,18 @@
     position: relative;
     border: 1px solid var(--border);
     transition: transform 0.2s ease, border-color 0.2s ease;
+    min-height: 180px;
   }
+  .card.loading .pill, .card.loading .dept-title, .card.loading .dept-th, .card.loading .desc, .card.loading .model-badge, .card.loading .agent-slug {
+    background: var(--rule); border-radius: 4px; color: transparent; pointer-events: none;
+  }
+  .card.loading .pill { width: 40px; height: 16px; }
+  .card.loading .dept-title { width: 120px; height: 20px; margin-bottom: 8px; }
+  .card.loading .dept-th { width: 80px; height: 16px; }
+  .card.loading .desc { width: 100%; height: 36px; }
+  .card.loading .agent-slug { width: 60px; height: 12px; }
+  .card.loading .model-badge { width: 40px; height: 12px; }
+
   .card:hover {
     transform: translateY(-2px);
     border-color: rgba(34, 211, 238, 0.3);
@@ -286,7 +299,7 @@
   <div class="title-row">
     <div>
       <h1>Department Status Overview</h1>
-      <div class="subtitle">Smarter Team. Stronger WGI. 12 active departments.</div>
+      <div class="subtitle">Smarter Team. Stronger WGI. Live from backend.</div>
     </div>
     <div class="search-wrap">
       <svg class="search-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
@@ -297,13 +310,13 @@
   <section class="kpi-strip">
     <div class="kpi-cell">
       <div class="kpi-label">Total Departments</div>
-      <div class="kpi-val">12</div>
-      <div class="kpi-sub">100% operational</div>
+      <div class="kpi-val loading" id="kpi-total"></div>
+      <div class="kpi-sub loading" id="kpi-total-sub"></div>
     </div>
     <div class="kpi-cell">
       <div class="kpi-label">Active Agents</div>
-      <div class="kpi-val">12 / 12</div>
-      <div class="kpi-sub">Zero downtime</div>
+      <div class="kpi-val loading" id="kpi-active"></div>
+      <div class="kpi-sub loading" id="kpi-active-sub"></div>
     </div>
     <div class="kpi-cell">
       <div class="kpi-label">Model Family</div>
@@ -312,36 +325,52 @@
     </div>
     <div class="kpi-cell">
       <div class="kpi-label">System Health</div>
-      <div class="kpi-val" style="color: var(--positive);">Optimal</div>
-      <div class="kpi-sub">Updated just now</div>
+      <div class="kpi-val" style="color: var(--positive);" id="kpi-health">Optimal</div>
+      <div class="kpi-sub" id="kpi-health-sub">Connected</div>
     </div>
   </section>
 
   <h2 style="font-size: var(--fs-section); font-weight: 600; margin-bottom: 12px;">Active Departments</h2>
   <div class="grid" id="grid">
-    <!-- Rendered by JS -->
+    <article class="card loading"><div class="card-top"><span class="pill"></span></div><div><div class="dept-title"></div><div class="dept-th"></div><p class="desc"></p></div><div class="card-footer"><span class="agent-slug"></span><span class="model-badge"></span></div></article>
+    <article class="card loading"><div class="card-top"><span class="pill"></span></div><div><div class="dept-title"></div><div class="dept-th"></div><p class="desc"></p></div><div class="card-footer"><span class="agent-slug"></span><span class="model-badge"></span></div></article>
+    <article class="card loading"><div class="card-top"><span class="pill"></span></div><div><div class="dept-title"></div><div class="dept-th"></div><p class="desc"></p></div><div class="card-footer"><span class="agent-slug"></span><span class="model-badge"></span></div></article>
+    <article class="card loading"><div class="card-top"><span class="pill"></span></div><div><div class="dept-title"></div><div class="dept-th"></div><p class="desc"></p></div><div class="card-footer"><span class="agent-slug"></span><span class="model-badge"></span></div></article>
   </div>
 </main>
 
 <footer>
-  WGI AI Office · True-Black Flat App Screen · Built with taste-skill rules
+  WGI AI Office · True-Black Flat App Screen · Backend API: ./data/departments.json
 </footer>
 
 <script>
-const departments = [
-  { name: 'AI CEO', nameTH: 'ผู้บริหารระดับสูง', agent: 'ai-ceo', model: 'Opus 4.5', status: 'Active', metric: 'ชี้ขาดแล้ว', desc: 'กำหนดทิศทางองค์กร วิสัยทัศน์ และการตัดสินใจชี้ขาดระดับบริหาร' },
-  { name: 'AI Strategy', nameTH: 'วางแผนกลยุทธ์', agent: 'ai-strategy', model: 'Opus 4.5', status: 'Active', metric: 'ดำเนินอยู่', desc: 'ออกแบบยุทธศาสตร์ระยะยาว แผนการเติบโต และเป้าหมายรายไตรมาส' },
-  { name: 'AI Sales', nameTH: 'ฝ่ายขาย', agent: 'ai-sales', model: 'Sonnet', status: 'Active', metric: '12 ลีด', desc: 'จัดการ pipeline การขาย การแปลงลีด การติดตามโควตา และพัฒนาธุรกิจ' },
-  { name: 'AI Finance', nameTH: 'ฝ่ายการเงิน', agent: 'ai-finance', model: 'Sonnet', status: 'Active', metric: 'ควบคุมได้', desc: 'สร้างโมเดลทางการเงิน งบประมาณ วิเคราะห์ต้นทุน และรายงานบัญชี' },
-  { name: 'AI HR', nameTH: 'ทรัพยากรบุคคล', agent: 'ai-hr', model: 'Sonnet', status: 'Active', metric: '12 คน', desc: 'สรรหา ปฐมนิเทศ วัฒนธรรมองค์กร บริหารผลงาน และนโยบาย HR' },
-  { name: 'AI Operations', nameTH: 'ฝ่ายปฏิบัติการ', agent: 'ai-operations', model: 'Sonnet', status: 'Active', metric: 'ปกติ (SLA)', desc: 'จัดการปฏิบัติการประจำวัน ควบคุมคุณภาพ และติดตาม SLA' },
-  { name: 'AI Marketing', nameTH: 'ฝ่ายการตลาด', agent: 'ai-marketing', model: 'Sonnet', status: 'Active', metric: 'ใช้งานอยู่', desc: 'วางตำแหน่งแบรนด์ ดำเนินแคมเปญ สร้างคอนเทนต์ และเข้าถึงตลาด' },
-  { name: 'AI IT & Data', nameTH: 'ไอทีและข้อมูล', agent: 'ai-it-data', model: 'Opus 4.5', status: 'Active', metric: 'ระบบปกติ', desc: 'โครงสร้างพื้นฐานไอที สถาปัตยกรรมซอฟต์แวร์ และท่อส่งข้อมูล' },
-  { name: 'AI Legal', nameTH: 'ฝ่ายกฎหมาย', agent: 'ai-legal', model: 'Sonnet', status: 'Active', metric: 'ทบทวนแล้ว', desc: 'ปฏิบัติตามกฎหมาย ตรวจสอบสัญญา จัดการความเสี่ยง และกฎระเบียบ' },
-  { name: 'AI Research', nameTH: 'ฝ่ายวิจัย', agent: 'ai-research', model: 'Sonnet', status: 'Active', metric: 'อัปเดต', desc: 'วิจัยตลาด วิเคราะห์คู่แข่ง วิเคราะห์ข้อมูล และรายงานข่าวกรอง' },
-  { name: 'AI Support', nameTH: 'ฝ่ายสนับสนุน', agent: 'ai-support', model: 'Sonnet', status: 'Active', metric: 'แก้ไขแล้ว', desc: 'ความสำเร็จของลูกค้า แก้ไขตั๋ว และคัดกรองข้อเสนอแนะ' },
-  { name: 'AI Admin', nameTH: 'ฝ่ายธุรการ', agent: 'ai-admin', model: 'Sonnet', status: 'Active', metric: 'ประสานแล้ว', desc: 'บริหารสำนักงาน กำหนดเวลา ประสานเวิร์กโฟลว์ และจัดการทรัพยากร' }
-];
+let globalDepartments = [];
+
+async function loadData() {
+  try {
+    const res = await fetch('./data/departments.json');
+    const data = await res.json();
+    globalDepartments = data.departments;
+
+    document.getElementById('kpi-total').textContent = data.totalDepartments;
+    document.getElementById('kpi-total').classList.remove('loading');
+    document.getElementById('kpi-total-sub').textContent = '100% operational';
+    document.getElementById('kpi-total-sub').classList.remove('loading');
+
+    document.getElementById('kpi-active').textContent = `${data.activeDepartments} / ${data.totalDepartments}`;
+    document.getElementById('kpi-active').classList.remove('loading');
+    document.getElementById('kpi-active-sub').textContent = 'Zero downtime';
+    document.getElementById('kpi-active-sub').classList.remove('loading');
+
+    document.getElementById('kpi-health').textContent = data.systemHealth;
+    document.getElementById('kpi-health-sub').textContent = new Date(data.lastUpdated).toLocaleTimeString();
+
+    render(globalDepartments);
+  } catch (err) {
+    console.error('Failed to load backend data', err);
+    document.getElementById('grid').innerHTML = '<div class="empty">ไม่สามารถโหลดข้อมูลจาก Backend ได้ (Failed to load backend data)</div>';
+  }
+}
 
 function render(list) {
   const grid = document.getElementById('grid');
@@ -356,7 +385,7 @@ function render(list) {
     card.innerHTML = `
       <div>
         <div class="card-top">
-          
+          <span style="font-size:12px; font-weight:600; color:var(--muted)">${d.metric}</span>
           <span class="pill">${d.status}</span>
         </div>
         <div class="dept-title">${d.name}</div>
@@ -374,7 +403,7 @@ function render(list) {
 
 function filter() {
   const q = document.getElementById('search').value.toLowerCase();
-  const filtered = departments.filter(d =>
+  const filtered = globalDepartments.filter(d =>
     d.name.toLowerCase().includes(q) ||
     d.nameTH.toLowerCase().includes(q) ||
     d.agent.includes(q) ||
@@ -384,7 +413,7 @@ function filter() {
 }
 
 document.getElementById('search').addEventListener('input', filter);
-render(departments);
+loadData();
 </script>
 
 </body>
