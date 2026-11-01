@@ -1,8 +1,8 @@
 {
-  "lastUpdated": "2026-11-01T15:00:00Z",
-  "systemHealth": "Optimal",
+  "lastUpdated": "2026-11-01T09:04:35.182Z",
+  "systemHealth": "At Risk",
   "totalDepartments": 12,
-  "activeDepartments": 12,
+  "activeDepartments": 11,
   "departments": [
     {
       "name": "AI CEO",
@@ -27,8 +27,8 @@
       "nameTH": "ฝ่ายขาย",
       "agent": "ai-sales",
       "model": "Sonnet",
-      "status": "Active",
-      "metric": "12 ลีด",
+      "status": "At Risk",
+      "metric": "8 ลีด (pipeline ช้าลง)",
       "desc": "จัดการ pipeline การขาย การแปลงลีด การติดตามโควตา และพัฒนาธุรกิจ"
     },
     {
