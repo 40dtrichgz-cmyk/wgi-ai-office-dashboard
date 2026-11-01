@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WGI AI Office — Animated Isometric View</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #05070a;
+    --cyan: #22d3ee;
+    --cyan-glow: rgba(34, 211, 238, 0.4);
+    --amber: #e5a93b;
+    --red: #e5484d;
+    --font: "Inter", system-ui, sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: #fff;
+    font-family: var(--font);
+    overflow: hidden;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Header */
+  .header {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    padding: 1.5rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 100;
+    pointer-events: none;
+  }
+  .brand h1 { font-size: 1.5rem; font-weight: 800; letter-spacing: -0.5px; }
+  .brand p { font-size: 0.8rem; color: #94a3b8; }
+  .nav-btn {
+    pointer-events: auto;
+    padding: 0.6rem 1.2rem;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: #fff;
+    border-radius: 999px;
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: all 0.2s;
+  }
+  .nav-btn:hover { background: rgba(255,255,255,0.1); border-color: var(--cyan); }
+
+  /* Scene Container */
+  .scene-container {
+    flex: 1;
+    position: relative;
+    perspective: 1000px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* The Isometric Office */
+  .office {
+    position: relative;
+    width: 800px;
+    height: 600px;
+    transform: rotateX(60deg) rotateZ(-45deg);
+    transform-style: preserve-3d;
+    transition: transform 0.5s ease-out;
+  }
+
+  /* Floor Grid */
+  .floor {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(rgba(34, 211, 238, 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(34, 211, 238, 0.05) 1px, transparent 1px);
+    background-size: 40px 40px;
+    border: 2px solid rgba(34, 211, 238, 0.2);
+    box-shadow: 0 0 40px rgba(34, 211, 238, 0.1);
+  }
+
+  /* Center Piece: The WGI Structure */
+  .center-core {
+    position: absolute;
+    left: 50%; top: 50%;
+    width: 120px; height: 120px;
+    transform: translate(-50%, -50%) translateZ(0);
+    transform-style: preserve-3d;
+  }
+  .wgi-tower {
+    position: absolute;
+    width: 100%; height: 100%;
+    background: rgba(34, 211, 238, 0.1);
+    border: 2px solid var(--cyan);
+    transform: translateZ(40px);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 2rem; color: var(--cyan);
+    text-shadow: 0 0 10px var(--cyan);
+    box-shadow: inset 0 0 20px var(--cyan-glow), 0 0 40px var(--cyan-glow);
+    animation: tower-float 4s infinite ease-in-out;
+  }
+  @keyframes tower-float {
+    0%, 100% { transform: translateZ(40px); }
+    50% { transform: translateZ(60px); }
+  }
+
+  /* Workstations */
+  .workstation {
+    position: absolute;
+    width: 60px; height: 40px;
+    transform-style: preserve-3d;
+  }
+  .desk {
+    position: absolute;
+    inset: 0;
+    background: #1e293b;
+    border: 1px solid rgba(255,255,255,0.1);
+    transform: translateZ(5px);
+  }
+  .desk-glow {
+    position: absolute;
+    inset: -5px;
+    background: var(--status-color, var(--cyan));
+    filter: blur(10px);
+    opacity: 0.2;
+    transform: translateZ(0);
+    animation: pulse 2s infinite;
+  }
+
+  /* Animated Employee (Avatar) */
+  .agent {
+    position: absolute;
+    left: 50%; top: 50%;
+    width: 20px; height: 20px;
+    transform: translate(-50%, -50%) translateZ(10px) rotateZ(45deg) rotateX(-60deg);
+  }
+  .agent-body {
+    width: 100%; height: 100%;
+    background: #fff;
+    border-radius: 50%;
+    box-shadow: 0 0 10px rgba(255,255,255,0.5);
+    animation: agent-work 1.5s infinite ease-in-out;
+  }
+  .agent-label {
+    position: absolute;
+    bottom: -25px; left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0,0,0,0.8);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.65rem;
+    white-space: nowrap;
+    border: 1px solid rgba(255,255,255,0.2);
+    font-weight: 600;
+  }
+
+  @keyframes agent-work {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1) translateY(-2px); }
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 0.15; }
+    50% { opacity: 0.35; }
+  }
+
+  /* Status Legend at Bottom */
+  .agent-bar {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    padding: 1.5rem;
+    background: linear-gradient(0deg, rgba(0,0,0,0.8) 0%, transparent 100%);
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    z-index: 100;
+  }
+  .mini-agent {
+    display: flex; flex-direction: column; align-items: center; gap: 4px;
+    opacity: 0.6; transition: opacity 0.3s;
+  }
+  .mini-agent.active { opacity: 1; }
+  .mini-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--status-color, var(--cyan)); box-shadow: 0 0 5px var(--status-color, var(--cyan)); }
+  .mini-name { font-size: 0.6rem; color: #94a3b8; font-weight: 600; text-transform: uppercase; }
+
+  /* Responsiveness */
+  @media (max-width: 640px) {
+    .office { transform: rotateX(60deg) rotateZ(-45deg) scale(0.6); }
+    .header { padding: 1rem; }
+    .brand h1 { font-size: 1.1rem; }
+    .agent-bar { flex-wrap: wrap; gap: 0.5rem; padding: 0.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="brand">
+    <h1>WGI AI OFFICE</h1>
+    <p>Real-time Neural Network Operations</p>
+  </div>
+  <a href="./department-dashboard.html" class="nav-btn">Dashboard View</a>
+</header>
+
+<div class="scene-container">
+  <div class="office" id="office">
+    <div class="floor"></div>
+
+    <div class="center-core">
+      <div class="wgi-tower">WGI</div>
+    </div>
+
+    <!-- Stations injected by JS -->
+  </div>
+</div>
+
+<div class="agent-bar" id="agent-bar">
+  <!-- Mini dots injected by JS -->
+</div>
+
+<script>
+  // Positions in isometric coordinates (relative to center 50,50)
+  // Distance from center and angle
+  const positions = [
+    { r: 180, a: 0 },   { r: 180, a: 30 },  { r: 180, a: 60 },
+    { r: 180, a: 90 },  { r: 180, a: 120 }, { r: 180, a: 150 },
+    { r: 240, a: 0 },   { r: 240, a: 45 },  { r: 240, a: 135 },
+    { r: 240, a: 180 }, { r: 240, a: 225 }, { r: 240, a: 315 }
+  ];
+
+  async function init() {
+    try {
+      const res = await fetch('./data/departments.json');
+      const data = await res.json();
+      renderScene(data.departments);
+    } catch (e) {
+      console.error("Fetch failed", e);
+      // Fallback
+    }
+  }
+
+  function renderScene(depts) {
+    const office = document.getElementById('office');
+    const bar = document.getElementById('agent-bar');
+
+    depts.forEach((d, i) => {
+      const pos = positions[i];
+      const x = 400 + Math.cos(pos.a * Math.PI / 180) * pos.r;
+      const y = 300 + Math.sin(pos.a * Math.PI / 180) * pos.r;
+
+      const statusColor = d.status === 'Active' ? '#22d3ee' : (d.status === 'At Risk' ? '#e5a93b' : '#e5484d');
+
+      // Workstation
+      const station = document.createElement('div');
+      station.className = 'workstation';
+      station.style.left = `${x - 30}px`;
+      station.style.top = `${y - 20}px`;
+      station.style.setProperty('--status-color', statusColor);
+      station.innerHTML = `
+        <div class="desk-glow"></div>
+        <div class="desk"></div>
+        <div class="agent">
+          <div class="agent-body" style="background: ${statusColor}"></div>
+          <div class="agent-label">${d.name}</div>
+        </div>
+      `;
+      office.appendChild(station);
+
+      // Mini bar
+      const mini = document.createElement('div');
+      mini.className = 'mini-agent active';
+      mini.style.setProperty('--status-color', statusColor);
+      mini.innerHTML = `
+        <div class="mini-dot"></div>
+        <div class="mini-name">${d.agent.split('-')[1]}</div>
+      `;
+      bar.appendChild(mini);
+    });
+  }
+
+  init();
+</script>
+
+</body>
+</html>

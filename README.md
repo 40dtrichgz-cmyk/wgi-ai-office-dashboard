@@ -10,6 +10,9 @@ A 13‑agent Claude Code team simulating a full corporate office, plus a live de
 | `.claude/commands/` | `/department-status` — Thai executive summary of all 12 departments |
 | `.claude/skills/` | `localweb-dashboard` — opens the dashboard in your browser |
 | `department-dashboard.html` | **Live dashboard** — open this file in any browser (no server needed) |
+| `office-animation.html` | **Animated isometric view** — see the AI team in action at their desks |
+| `data/departments.json` | **Backend data source** — real-time data for both views |
+| `server.mjs` | **Local HTTP server** — run `node server.mjs` to view with backend fetch |
 
 ## Quick start
 
