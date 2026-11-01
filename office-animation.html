@@ -171,6 +171,54 @@
     50% { opacity: 0.35; }
   }
 
+  /* Blinking status indicators — synced to backend status */
+  .status-indicator {
+    position: absolute;
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    transform: translateZ(15px);
+    box-shadow: 0 0 8px currentColor;
+  }
+  .status-indicator.active {
+    animation: blink-active 1.2s infinite ease-in-out;
+    background: #22d3ee;
+    color: #22d3ee;
+  }
+  .status-indicator.at-risk {
+    animation: blink-warn 2s infinite ease-in-out;
+    background: #e5a93b;
+    color: #e5a93b;
+  }
+  .status-indicator.offline {
+    animation: blink-off 3s infinite ease-in-out;
+    background: #e5484d;
+    color: #e5484d;
+  }
+  @keyframes blink-active {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+  @keyframes blink-warn {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 1; }
+  }
+  @keyframes blink-off {
+    0%, 100% { opacity: 0.2; }
+    50% { opacity: 1; }
+  }
+
+  /* Follow-mode highlight */
+  .workstation.follow {
+    filter: drop-shadow(0 0 15px var(--status-color, var(--cyan)));
+  }
+  .mini-agent.follow .mini-dot {
+    animation: follow-pulse 0.8s infinite;
+  }
+  @keyframes follow-pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.6); }
+  }
+
   /* Status Legend at Bottom */
   .agent-bar {
     position: absolute;
@@ -207,6 +255,7 @@
     <p>Real-time Neural Network Operations</p>
   </div>
   <a href="./department-dashboard.html" class="nav-btn">Dashboard View</a>
+  <button id="follow-btn" class="nav-btn" style="cursor:pointer;">Follow Mode</button>
 </header>
 
 <div class="scene-container">
@@ -246,7 +295,9 @@
     }
   }
 
-  function renderScene(depts) {
+  let depts = [];
+  function renderScene(data) {
+    depts = data;
     const office = document.getElementById('office');
     const bar = document.getElementById('agent-bar');
 
@@ -256,16 +307,19 @@
       const y = 300 + Math.sin(pos.a * Math.PI / 180) * pos.r;
 
       const statusColor = d.status === 'Active' ? '#22d3ee' : (d.status === 'At Risk' ? '#e5a93b' : '#e5484d');
+      const statusClass = d.status.toLowerCase().replace(' ', '-');
 
       // Workstation
       const station = document.createElement('div');
       station.className = 'workstation';
+      station.dataset.agent = d.agent;
       station.style.left = `${x - 30}px`;
       station.style.top = `${y - 20}px`;
       station.style.setProperty('--status-color', statusColor);
       station.innerHTML = `
         <div class="desk-glow"></div>
         <div class="desk"></div>
+        <div class="status-indicator ${statusClass}"></div>
         <div class="agent">
           <div class="agent-body" style="background: ${statusColor}"></div>
           <div class="agent-label">${d.name}</div>
@@ -276,6 +330,7 @@
       // Mini bar
       const mini = document.createElement('div');
       mini.className = 'mini-agent active';
+      mini.dataset.agent = d.agent;
       mini.style.setProperty('--status-color', statusColor);
       mini.innerHTML = `
         <div class="mini-dot"></div>
@@ -285,7 +340,73 @@
     });
   }
 
-  init();
+  // Follow Mode: pick a random active agent and track it
+  let followTimer = null;
+  let followActive = false;
+
+  function pickRandomActive() {
+    const active = [...document.querySelectorAll('.workstation')].filter(w => {
+      const dept = depts.find(d => d.agent === w.dataset.agent);
+      return dept && dept.status === 'Active';
+    });
+    if (active.length === 0) return null;
+    return active[Math.floor(Math.random() * active.length)];
+  }
+
+  function setFollow(target) {
+    document.querySelectorAll('.workstation').forEach(w => w.classList.remove('follow'));
+    document.querySelectorAll('.mini-agent').forEach(m => m.classList.remove('follow'));
+    if (target) {
+      target.classList.add('follow');
+      const mini = document.querySelector(`.mini-agent[data-agent="${target.dataset.agent}"]`);
+      if (mini) mini.classList.add('follow');
+    }
+  }
+
+  function startFollow() {
+    const target = pickRandomActive();
+    if (!target) return;
+    setFollow(target);
+    // Re-pick every 5 seconds
+    followTimer = setInterval(() => {
+      const next = pickRandomActive();
+      if (next) setFollow(next);
+    }, 5000);
+  }
+
+  function stopFollow() {
+    if (followTimer) clearInterval(followTimer);
+    followTimer = null;
+    setFollow(null);
+  }
+
+  async function init() {
+    try {
+      const res = await fetch('./data/departments.json');
+      const data = await res.json();
+      renderScene(data.departments);
+    } catch (e) {
+      console.error('Fetch failed', e);
+    }
+  }
+
+  init().then(() => {
+    document.getElementById('follow-btn').addEventListener('click', () => {
+      followActive = !followActive;
+      const btn = document.getElementById('follow-btn');
+      if (followActive) {
+        btn.textContent = 'Stop Follow';
+        btn.style.background = 'rgba(34, 211, 238, 0.15)';
+        btn.style.borderColor = 'var(--cyan)';
+        startFollow();
+      } else {
+        btn.textContent = 'Follow Mode';
+        btn.style.background = 'rgba(255,255,255,0.05)';
+        btn.style.borderColor = 'rgba(255,255,255,0.1)';
+        stopFollow();
+      }
+    });
+  });
 </script>
 
 </body>
