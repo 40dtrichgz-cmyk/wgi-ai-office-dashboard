@@ -10,6 +10,7 @@ skills:
   - writing-plans
   - department-status
   - localweb-dashboard
+  - skills-buildagentai
 tools:
   - Glob
   - Grep
