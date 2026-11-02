@@ -12,7 +12,8 @@
       "status": "Active",
       "metric": "ชี้ขาดแล้ว",
       "desc": "กำหนดทิศทางองค์กร วิสัยทัศน์ และการตัดสินใจชี้ขาดระดับบริหาร",
-      "color": "#e5484d"
+      "color": "#e5484d",
+      "skills": "Executive oversight, final decisions, governance"
     },
     {
       "name": "AI Strategy",
@@ -22,7 +23,8 @@
       "status": "Active",
       "metric": "ดำเนินอยู่",
       "desc": "ออกแบบยุทธศาสตร์ระยะยาว แผนการเติบโต และเป้าหมายรายไตรมาส",
-      "color": "#b47aea"
+      "color": "#b47aea",
+      "skills": "Business planning, growth roadmap, market positioning"
     },
     {
       "name": "AI Sales",
@@ -32,7 +34,8 @@
       "status": "At Risk",
       "metric": "8 ลีด (pipeline ช้าลง)",
       "desc": "จัดการ pipeline การขาย การแปลงลีด การติดตามโควตา และพัฒนาธุรกิจ",
-      "color": "#e5a93b"
+      "color": "#e5a93b",
+      "skills": "Pipeline management, lead conversion, quota tracking"
     },
     {
       "name": "AI Finance",
@@ -42,7 +45,8 @@
       "status": "Active",
       "metric": "ควบคุมได้",
       "desc": "สร้างโมเดลทางการเงิน งบประมาณ วิเคราะห์ต้นทุน และรายงานบัญชี",
-      "color": "#5bc8af"
+      "color": "#5bc8af",
+      "skills": "Budgeting, financial modeling, cost analysis"
     },
     {
       "name": "AI HR",
@@ -52,7 +56,8 @@
       "status": "Active",
       "metric": "12 คน",
       "desc": "สรรหา ปฐมนิเทศ วัฒนธรรมองค์กร บริหารผลงาน และนโยบาย HR",
-      "color": "#60a5fa"
+      "color": "#60a5fa",
+      "skills": "Talent acquisition, onboarding, culture, performance"
     },
     {
       "name": "AI Operations",
@@ -62,7 +67,8 @@
       "status": "Active",
       "metric": "ปกติ (SLA)",
       "desc": "จัดการปฏิบัติการประจำวัน ควบคุมคุณภาพ และติดตาม SLA",
-      "color": "#e5a93b"
+      "color": "#e5a93b",
+      "skills": "SOPs, SLA monitoring, process efficiency"
     },
     {
       "name": "AI Marketing",
@@ -72,7 +78,8 @@
       "status": "Active",
       "metric": "ใช้งานอยู่",
       "desc": "วางตำแหน่งแบรนด์ ดำเนินแคมเปญ สร้างคอนเทนต์ และเข้าถึงตลาด",
-      "color": "#f472b6"
+      "color": "#f472b6",
+      "skills": "Brand positioning, campaigns, content creation"
     },
     {
       "name": "AI IT & Data",
@@ -82,7 +89,8 @@
       "status": "Active",
       "metric": "ระบบปกติ",
       "desc": "โครงสร้างพื้นฐานไอที สถาปัตยกรรมซอฟต์แวร์ และท่อส่งข้อมูล",
-      "color": "#22d3ee"
+      "color": "#22d3ee",
+      "skills": "Infrastructure, data pipelines, DevOps, security"
     },
     {
       "name": "AI Legal",
@@ -92,7 +100,8 @@
       "status": "Active",
       "metric": "ทบทวนแล้ว",
       "desc": "ปฏิบัติตามกฎหมาย ตรวจสอบสัญญา จัดการความเสี่ยง และกฎระเบียบ",
-      "color": "#1e293b"
+      "color": "#1e293b",
+      "skills": "Compliance, contracts, regulatory adherence"
     },
     {
       "name": "AI Research",
@@ -102,7 +111,8 @@
       "status": "Active",
       "metric": "อัปเดต",
       "desc": "วิจัยตลาด วิเคราะห์คู่แข่ง วิเคราะห์ข้อมูล และรายงานข่าวกรอง",
-      "color": "#8b5cf6"
+      "color": "#8b5cf6",
+      "skills": "Market research, competitive intelligence, analytics"
     },
     {
       "name": "AI Support",
@@ -112,7 +122,8 @@
       "status": "Active",
       "metric": "แก้ไขแล้ว",
       "desc": "ความสำเร็จของลูกค้า แก้ไขตั๋ว และคัดกรองข้อเสนอแนะ",
-      "color": "#2dd4bf"
+      "color": "#2dd4bf",
+      "skills": "Customer success, ticket resolution, feedback triage"
     },
     {
       "name": "AI Admin",
@@ -122,7 +133,8 @@
       "status": "Active",
       "metric": "ประสานแล้ว",
       "desc": "บริหารสำนักงาน กำหนดเวลา ประสานเวิร์กโฟลว์ และจัดการทรัพยากร",
-      "color": "#ffffff"
+      "color": "#ffffff",
+      "skills": "Scheduling, resource coordination, workflow hub"
     }
   ]
 }
