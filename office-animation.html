@@ -38,6 +38,10 @@
 
   let scene, camera, renderer, controls;
   const stations = [];
+  const raycaster = new THREE.Raycaster();
+  const mouse = new THREE.Vector2();
+
+  window.stations = stations;
 
   async function init() {
     scene = new THREE.Scene();
@@ -54,13 +58,11 @@
     controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
 
-    // Lights
     scene.add(new THREE.AmbientLight(0xffffff, 0.5));
     const dirLight = new THREE.DirectionalLight(0xffffff, 1);
     dirLight.position.set(10, 20, 10);
     scene.add(dirLight);
 
-    // Floor
     const floor = new THREE.Mesh(
       new THREE.PlaneGeometry(30, 30),
       new THREE.MeshPhysicalMaterial({ color: 0x141620, roughness: 0.1, metalness: 0.1 })
@@ -68,7 +70,6 @@
     floor.rotation.x = -Math.PI / 2;
     scene.add(floor);
 
-    // Data Load
     const res = await fetch('./data/departments.json');
     const data = await res.json();
     createOffice(data.departments);
@@ -90,11 +91,9 @@
       const group = new THREE.Group();
       group.position.set(x, 0, z);
 
-      // Desk
       const desk = new THREE.Mesh(new THREE.BoxGeometry(2, 0.5, 1), glassMat);
       group.add(desk);
 
-      // Agent
       const agent = new THREE.Mesh(new THREE.CapsuleGeometry(0.3, 0.6), new THREE.MeshStandardMaterial({ color: d.status === 'Active' ? 0x22d3ee : 0xe5a93b }));
       agent.position.y = 0.8;
       group.add(agent);
@@ -116,10 +115,9 @@
     camera.updateProjectionMatrix();
   });
 
-  // Interactivity
   window.addEventListener('click', (e) => {
-    const mouse = new THREE.Vector2((e.clientX / window.innerWidth) * 2 - 1, -(e.clientY / window.innerHeight) * 2 + 1);
-    const raycaster = new THREE.Raycaster();
+    mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+    mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
     raycaster.setFromCamera(mouse, camera);
     const intersects = raycaster.intersectObjects(stations, true);
     if (intersects.length > 0) {
