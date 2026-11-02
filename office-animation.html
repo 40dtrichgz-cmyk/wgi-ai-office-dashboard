@@ -53,6 +53,8 @@
   let scene, camera, renderer, controls;
   const stations = [];
   window.stations = stations;
+  let logoRing = null;
+  let hologramPanels = [];
   const raycaster = new THREE.Raycaster();
   const mouse = new THREE.Vector2();
   let reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -237,13 +239,13 @@
   }
 
   function addDecor() {
-    // InstancedMesh for floating Jack-o'-lanterns / pumpkins
+    const dummy = new THREE.Object3D();
+
+    // --- Floating Jack-o'-lanterns (InstancedMesh) ---
     const pumpkinGeo = new THREE.SphereGeometry(0.4, 16, 16);
     pumpkinGeo.scale(1, 0.8, 1);
     const pumpkinMat = new THREE.MeshStandardMaterial({ color: 0xe5a93b, roughness: 0.3 });
     const pumpkinInst = new THREE.InstancedMesh(pumpkinGeo, pumpkinMat, 12);
-
-    const dummy = new THREE.Object3D();
     for (let i = 0; i < 12; i++) {
       const angle = (i / 12) * Math.PI * 2 + 0.2;
       dummy.position.set(Math.cos(angle) * 11, 0.3, Math.sin(angle) * 11);
@@ -252,6 +254,81 @@
     }
     pumpkinInst.instanceMatrix.needsUpdate = true;
     scene.add(pumpkinInst);
+
+    // --- Hanging Cobweb Strands (InstancedMesh) ---
+    const cobGeo = new THREE.CylinderGeometry(0.02, 0.02, 1.5, 4);
+    const cobMat = new THREE.MeshStandardMaterial({ color: 0x94a3b8, roughness: 0.8 });
+    const cobInst = new THREE.InstancedMesh(cobGeo, cobMat, 8);
+    for (let i = 0; i < 8; i++) {
+      const angle = (i / 8) * Math.PI * 2;
+      dummy.position.set(Math.cos(angle) * 10, 2.5, Math.sin(angle) * 10);
+      dummy.updateMatrix();
+      cobInst.setMatrixAt(i, dummy.matrix);
+    }
+    cobInst.instanceMatrix.needsUpdate = true;
+    scene.add(cobInst);
+
+    // --- Glowing Cauldrons (InstancedMesh) ---
+    const cauldronGeo = new THREE.CylinderGeometry(0.5, 0.4, 0.7, 16);
+    const cauldronMat = new THREE.MeshStandardMaterial({ color: 0x1e1b4b, roughness: 0.3, metalness: 0.3 });
+    const cauldronInst = new THREE.InstancedMesh(cauldronGeo, cauldronMat, 6);
+    for (let i = 0; i < 6; i++) {
+      const angle = (i / 6) * Math.PI * 2 + 0.5;
+      dummy.position.set(Math.cos(angle) * 9.5, 0.35, Math.sin(angle) * 9.5);
+      dummy.updateMatrix();
+      cauldronInst.setMatrixAt(i, dummy.matrix);
+    }
+    cauldronInst.instanceMatrix.needsUpdate = true;
+    scene.add(cauldronInst);
+
+    // --- Floating Bats (InstancedMesh) ---
+    const batGeo = new THREE.SphereGeometry(0.15, 8, 8);
+    batGeo.scale(1, 0.2, 0.6);
+    const batMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, roughness: 0.5 });
+    const batInst = new THREE.InstancedMesh(batGeo, batMat, 10);
+    for (let i = 0; i < 10; i++) {
+      const angle = (i / 10) * Math.PI * 2;
+      dummy.position.set(Math.cos(angle) * 13, 3 + Math.sin(i * 2) * 0.5, Math.sin(angle) * 13);
+      dummy.updateMatrix();
+      batInst.setMatrixAt(i, dummy.matrix);
+    }
+    batInst.instanceMatrix.needsUpdate = true;
+    scene.add(batInst);
+
+    // --- Candle Clusters (InstancedMesh) ---
+    const candleGeo = new THREE.CylinderGeometry(0.08, 0.08, 0.4, 8);
+    const candleMat = new THREE.MeshStandardMaterial({ color: 0xfde68a, roughness: 0.4 });
+    const candleInst = new THREE.InstancedMesh(candleGeo, candleMat, 12);
+    for (let i = 0; i < 12; i++) {
+      const angle = (i / 12) * Math.PI * 2;
+      dummy.position.set(Math.cos(angle) * 9, 0.2, Math.sin(angle) * 9);
+      dummy.updateMatrix();
+      candleInst.setMatrixAt(i, dummy.matrix);
+    }
+    candleInst.instanceMatrix.needsUpdate = true;
+    scene.add(candleInst);
+
+    // --- Central Holographic WGI Logo above CEO hub ---
+    const logoRingGeo = new THREE.TorusGeometry(1.8, 0.05, 16, 48);
+    const logoMat = new THREE.MeshBasicMaterial({ color: 0x22d3ee, transparent: true, opacity: 0.7 });
+    logoRing = new THREE.Mesh(logoRingGeo, logoMat);
+    logoRing.position.y = 5;
+    scene.add(logoRing);
+
+    // --- Holographic Data Panels near each workstation ---
+    stations.forEach((st, i) => {
+      const panelGeo = new THREE.PlaneGeometry(0.8, 0.3);
+      const panelMat = new THREE.MeshBasicMaterial({
+        color: 0x22d3ee, transparent: true, opacity: 0.6,
+        side: THREE.DoubleSide
+      });
+      const panel = new THREE.Mesh(panelGeo, panelMat);
+      panel.position.copy(st.position);
+      panel.position.y = 1.8;
+      panel.lookAt(camera.position);
+      hologramPanels.push(panel);
+      scene.add(panel);
+    });
   }
 
   const clock = new THREE.Clock();
@@ -267,6 +344,18 @@
         if (agent) {
           agent.position.y = (st.userData.agent === 'ai-ceo' ? 0 : 0.8) + Math.sin(elapsedTime * 3 + idx) * 0.08;
         }
+      });
+    }
+
+    // Decor animations
+    if (!reducedMotion) {
+      if (logoRing) {
+        logoRing.rotation.z = elapsedTime * 0.5;
+      }
+      // Update holographic panels to face camera
+      hologramPanels.forEach((panel, i) => {
+        panel.material.opacity = 0.4 + Math.sin(elapsedTime * 2 + i) * 0.2;
+        panel.lookAt(camera.position);
       });
     }
 
